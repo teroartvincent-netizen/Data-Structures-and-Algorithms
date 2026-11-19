@@ -1,1 +1,85 @@
-# Data-Structures-and-Algorithms
+
+import java.util.Scanner;
+
+abstract class AbstractDFS {
+    abstract void dfs(int start);
+}
+
+class SubclassDFS extends AbstractDFS {
+    int[][] graph;
+    boolean[] visited;
+    int vertices;
+
+    SubclassDFS(int vertices) {
+        this.vertices = vertices;
+        graph = new int[vertices][vertices];
+        visited = new boolean[vertices];
+    }
+
+    void addEdge(int source, int destination) {
+        graph[source][destination] = 1;
+        graph[destination][source] = 1;
+    }
+
+    void displayMatrix() {
+        System.out.println("\nAdjacency Matrix:");
+
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                System.out.print(graph[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    @Override
+    void dfs(int start) {
+        visited[start] = true;
+        System.out.print(start + " ");
+
+        for (int i = 0; i < vertices; i++) {
+            if (graph[start][i] == 1 && !visited[i]) {
+                dfs(i);
+            }
+        }
+    }
+}
+
+public class MainDFS {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter number of vertices: ");
+        int vertices = input.nextInt();
+
+        SubclassDFS graph = new SubclassDFS(vertices);
+
+        System.out.print("Enter number of edges: ");
+        int edges = input.nextInt();
+
+        for (int i = 0; i < edges; i++) {
+            System.out.print("Enter source: ");
+            int source = input.nextInt();
+
+            System.out.print("Enter destination: ");
+            int destination = input.nextInt();
+
+            graph.addEdge(source, destination);
+        }
+
+        graph.displayMatrix();
+
+        System.out.print("\nEnter starting vertex: ");
+        int start = input.nextInt();
+
+        if (start >= 0 && start < vertices) {
+            System.out.println("\nDFS Traversal:");
+            graph.dfs(start);
+            System.out.println();
+        } else {
+            System.out.println("Invalid starting vertex!");
+        }
+
+        input.close();
+    }
+}
